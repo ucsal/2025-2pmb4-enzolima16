@@ -15,9 +15,23 @@ public class App {
 
             DrawingPanel panel = new DrawingPanel();
 
+            // Escolha da Cor na classe principal.
+            JButton colorButton = new JButton("Cor...");
+            colorButton.addActionListener(e -> {
+                Color newColor = JColorChooser.showDialog(
+                    frame,
+                    "Escolha a cor da figura",
+                    panel.getCurrentColor()
+                );
+                
+                if (newColor != null) {
+                    panel.setCurrentColor(newColor);
+                }
+            });
+
             frame.setLayout(new BorderLayout());
             frame.add(panel, BorderLayout.CENTER);
-
+            frame.add(colorButton, BorderLayout.NORTH);
             frame.setSize(900, 600);
             frame.setLocationRelativeTo(null);
             frame.setVisible(true);

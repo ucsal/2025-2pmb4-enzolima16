@@ -1,4 +1,3 @@
-
 package br.com.mariojp.figureeditor;
 
 import javax.swing.*;
@@ -6,7 +5,6 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.geom.Ellipse2D;
-import java.awt.geom.Rectangle2D;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,19 +14,21 @@ class DrawingPanel extends JPanel {
     private static final int DEFAULT_SIZE = 60;
     private final List<Shape> shapes = new ArrayList<>();
     private Point startDrag = null;
+    //Nova variável para o armazenamento da cor.
+    private Color currentColor;
 
     DrawingPanel() {
         
         setBackground(Color.WHITE);
         setOpaque(true);
         setDoubleBuffered(true);
+        this.currentColor = new Color(30, 144, 255); 
 
         var mouse = new MouseAdapter() {
             @Override public void mouseClicked(MouseEvent e) {
                 if (e.getClickCount() == 1 && startDrag == null) {
                     int size = Math.max(Math.min(DEFAULT_SIZE, DEFAULT_SIZE), 10);
                     Shape s =  new Ellipse2D.Double(e.getPoint().x, e.getPoint().y, size, size);
-                    //return new Rectangle2D.Double(e.getPoint().x, e.getPoint().y, Math.max(DEFAULT_SIZE, 10), Math.max(DEFAULT_SIZE, 10));
                     shapes.add(s);
                     repaint();
                 }
@@ -37,6 +37,15 @@ class DrawingPanel extends JPanel {
         addMouseListener(mouse);        
         addMouseMotionListener(mouse);
 
+    }
+    
+    //Getters e Setters do novo atributo.
+    void setCurrentColor(Color color) {
+        this.currentColor = color;
+    }
+
+    Color getCurrentColor() {
+        return this.currentColor;
     }
 
     void clear() {
@@ -50,7 +59,8 @@ class DrawingPanel extends JPanel {
         g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 
         for (Shape s : shapes) {
-            g2.setColor(new Color(30,144,255));
+            //Cor é armazenada no novo atributo currentColor.
+            g2.setColor(this.currentColor); 
             g2.fill(s);
             g2.setColor(new Color(0,0,0,70));
             g2.setStroke(new BasicStroke(1.2f));
@@ -59,5 +69,4 @@ class DrawingPanel extends JPanel {
 
         g2.dispose();
     }
-
 }
